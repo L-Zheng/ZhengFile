@@ -199,6 +199,10 @@
 
 /** 解压文件 */
 + (BOOL)unZipSourceFile:(NSString *)sourcePath toDesFolderPath:(NSString *)desFolderPath{
+    // 解压(文件大, 会比较耗时)
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//    });
+    
     if ([self isExists:sourcePath]) {
         NSFileManager *fileMgr = [NSFileManager defaultManager];
         //源文件存在

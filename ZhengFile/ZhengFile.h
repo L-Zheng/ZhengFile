@@ -48,10 +48,10 @@
 + (BOOL)moveSourceFile:(NSString *)sourcePath toDesPath:(NSString *)desPath;
 
 
-/** 解压文件 */
+/** 解压文件  大文件放到子线程 */
 + (BOOL)unZipSourceFile:(NSString *)sourcePath toDesFolderPath:(NSString *)desFolderPath;
 
-/** 压缩文件 */
+/** 压缩文件  大文件放到子线程 */
 + (BOOL)zipSourceFolder:(NSString *)sourceFolderPath toDesPath:(NSString *)desPath;
 
 
