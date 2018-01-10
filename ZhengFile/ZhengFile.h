@@ -26,7 +26,7 @@
 + (BOOL)creatFileFolder:(NSString *)fileFolderPath;
 
 /** 创建文件 */
-+ (BOOL)creatFile:(NSString *)filePath;
++ (BOOL)creatFile:(NSString *)filePath contents:(NSData *)contents;
 
 /** 文件(夹)是否存在 */
 + (BOOL)isExists:(NSString *)fileOrFolderPath;

@@ -89,10 +89,10 @@
     return NO;
 }
 
-+ (BOOL)creatFile:(NSString *)filePath{
++ (BOOL)creatFile:(NSString *)filePath contents:(NSData *)contents{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:filePath]){
-        BOOL isCreatSuccess = [fileManager createFileAtPath:filePath contents:nil attributes:nil];
+        BOOL isCreatSuccess = [fileManager createFileAtPath:filePath contents:contents attributes:nil];
         return isCreatSuccess;
     }
     NSLog(@"创建失败");
