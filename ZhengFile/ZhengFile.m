@@ -83,10 +83,75 @@
     BOOL existed = [fileManager fileExistsAtPath:fileFolderPath isDirectory:&isDir];
     if ( !(isDir == YES && existed == YES) ){
         BOOL isCreatSuccess = [fileManager createDirectoryAtPath:fileFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+        NSLog(@"创建目录成功---%@",fileFolderPath);
         return isCreatSuccess;
     }
     NSLog(@"创建失败");
     return NO;
+}
+
+/** 获取 上一层文件目录 */
++ (NSString *)getUpFileFolder:(NSString *)fileFolderPath{
+    
+    if (fileFolderPath == nil || fileFolderPath.length == 0) return nil;
+    if (![fileFolderPath hasPrefix:@"/"]) return nil;
+    if ([fileFolderPath hasSuffix:@"/"]) {
+        fileFolderPath = [fileFolderPath substringToIndex:fileFolderPath.length - 1];
+    }
+    
+    NSArray *subComStrArr = [fileFolderPath componentsSeparatedByString:@"/"];
+    if (subComStrArr == nil || subComStrArr.count == 0) return nil;
+    
+    NSMutableString *newStr = [NSMutableString stringWithString:@""];
+    for (NSInteger i = 0; i < subComStrArr.count; i++) {
+        NSString *subComStr = subComStrArr[i];
+        if (i == 0) {
+            [newStr appendString:subComStr];
+        }
+        
+        if (i < subComStrArr.count - 2) {
+            [newStr appendString:@"/"];
+            [newStr appendString:subComStrArr[i+1]];
+        }
+    }
+    return newStr;
+}
+
+/** 递归创建文件目录 */
++ (void)recursionCreateFileFolder:(NSString *)fileFolderPath{
+    
+    if (fileFolderPath == nil || fileFolderPath.length == 0) return;
+    if (![fileFolderPath hasPrefix:@"/"]) return;
+    if ([fileFolderPath hasSuffix:@"/"]) {
+//        NSLog(@"%@",fileFolderPath);
+        fileFolderPath = [fileFolderPath substringToIndex:fileFolderPath.length - 1];
+//        NSLog(@"%@",fileFolderPath);
+    }
+    
+    NSArray *subComStrArr = [fileFolderPath componentsSeparatedByString:@"/"];
+    if (subComStrArr == nil || subComStrArr.count == 0) return;
+    
+//    NSLog(@"%@",subComStrArr);
+//    /Users/em/Desktop/未命名文件夹/v0.1
+    
+    NSMutableString *newStr = [NSMutableString stringWithString:@""];
+    for (NSInteger i = 0; i < subComStrArr.count; i++) {
+        NSString *subComStr = subComStrArr[i];
+        if (i == 0) {
+            [newStr appendString:subComStr];
+        }
+        
+        [newStr appendString:@"/"];
+        
+        if (i < subComStrArr.count - 1) {
+            [newStr appendString:subComStrArr[i+1]];
+//            NSLog(@"%@",newStr);
+            if (![self isExists:newStr]) {
+                [self creatFileFolder:newStr];
+            }
+        }
+        
+    }
 }
 
 + (BOOL)creatFile:(NSString *)filePath contents:(NSData *)contents{
@@ -169,6 +234,10 @@
         if ([self isExists:desPath]) {
             //目标文件存在
             [fileMgr removeItemAtPath:desPath error:nil];
+        }else{
+            //目标不存在  获取上一层文件目录  递归创建文件夹
+            NSString *upPath = [self getUpFileFolder:desPath];
+            [self recursionCreateFileFolder:upPath];
         }
         NSError *error = nil;
         BOOL isSuccess = [fileMgr copyItemAtPath:sourcePath toPath:desPath error:&error];
@@ -186,6 +255,10 @@
         if ([self isExists:desPath]) {
             //目标文件存在
             [fileMgr removeItemAtPath:desPath error:nil];
+        }else{
+            //目标不存在  获取上一层文件目录  递归创建文件夹
+            NSString *upPath = [self getUpFileFolder:desPath];
+            [self recursionCreateFileFolder:upPath];
         }
         NSError *error = nil;
         BOOL isSuccess = [fileMgr moveItemAtPath:sourcePath toPath:desPath error:&error];

@@ -25,6 +25,12 @@
 /** 创建文件夹 */
 + (BOOL)creatFileFolder:(NSString *)fileFolderPath;
 
+/** 获取 上一层文件目录 */
++ (NSString *)getUpFileFolder:(NSString *)fileFolderPath;
+
+/** 递归创建文件目录 */
++ (void)recursionCreateFileFolder:(NSString *)fileFolderPath;
+
 /** 创建文件 */
 + (BOOL)creatFile:(NSString *)filePath contents:(NSData *)contents;
 
@@ -41,10 +47,10 @@
 + (long long)readSystemFreeSpace;
 
 
-/** 拷贝文件 */
+/** 拷贝文件(夹)  有bug  不能递归创建文件夹 */
 + (BOOL)copySourceFile:(NSString *)sourcePath toDesPath:(NSString *)desPath;
 
-/** 移动文件 */
+/** 移动文件(夹) */
 + (BOOL)moveSourceFile:(NSString *)sourcePath toDesPath:(NSString *)desPath;
 
 
